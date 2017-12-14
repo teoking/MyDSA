@@ -126,4 +126,20 @@ public class MySortedArrayList<E> extends MyArrayList<E> implements MySortedList
             return (comp.compare(e, list.get(lo)) == 0) ? lo : -1;
         }
     }
+
+    static class BinarySearchC<E> implements Searchable<E> {
+
+        @Override
+        public int search(MyList<E> list, E e, int lo, int hi, ElemComparable<E> comp) {
+            while (lo < hi) {
+                int mi = (lo + hi) >> 1;
+                int c = comp.compare(e, list.get(mi));
+                if (c < 0)
+                    hi = mi;
+                else
+                    lo = mi + 1;
+            }
+            return --lo;
+        }
+    }
 }

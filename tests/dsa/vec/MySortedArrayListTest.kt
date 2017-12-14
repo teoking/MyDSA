@@ -54,6 +54,9 @@ class MySortedArrayListTest {
         list.insert(Integer(7))
         list.insert(Integer(8))
         list.insert(Integer(14))
+        list.insert(Integer(17))
+        list.insert(Integer(17))
+        list.insert(Integer(17))
 
         var searchMethod : MySortedList.Searchable<Integer> = MySortedArrayList.LinearSearch<Integer>()
         assertTrue(list.search(Integer(6), 0, list.size(), comp, searchMethod) == 2)
@@ -70,5 +73,10 @@ class MySortedArrayListTest {
         searchMethod = MySortedArrayList.BinarySearchB()
         assertTrue(list.search(Integer(6), 0, list.size(), comp, searchMethod) == 2)
         assertTrue(list.search(Integer(14), 0, list.size(), comp, searchMethod) == 5)
+
+        searchMethod = MySortedArrayList.BinarySearchC()
+        assertTrue(list.search(Integer(6), 0, list.size(), comp, searchMethod) == 2)
+        assertTrue(list.search(Integer(14), 0, list.size(), comp, searchMethod) == 5)
+        assertTrue(list.search(Integer(17), 0, list.size(), comp, searchMethod) == 8)
     }
 }
