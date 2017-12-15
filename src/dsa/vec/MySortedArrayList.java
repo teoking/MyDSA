@@ -23,9 +23,14 @@ public class MySortedArrayList<E> extends MyArrayList<E> implements MySortedList
 
     }
 
+    // linear search, disorder or ordered, O(n)
     @Override
-    public int find(E e) {
-        return 0;
+    public int find(E e, ElemComparable comp) {
+        for (int i = 0; i < size; i++) {
+            if (comp.compare(e, get(i)) == 0)
+                return i;
+        }
+        return -1;
     }
 
     @Override
@@ -51,6 +56,8 @@ public class MySortedArrayList<E> extends MyArrayList<E> implements MySortedList
         shrink();
         return j - i;
     }
+
+    ////////////////////////////////// Search class //////////////////////////////////////////
 
     // O(n)
     static class LinearSearch<E> implements Searchable<E> {
@@ -127,6 +134,7 @@ public class MySortedArrayList<E> extends MyArrayList<E> implements MySortedList
         }
     }
 
+    // O(logn)
     static class BinarySearchC<E> implements Searchable<E> {
 
         @Override
@@ -135,11 +143,65 @@ public class MySortedArrayList<E> extends MyArrayList<E> implements MySortedList
                 int mi = (lo + hi) >> 1;
                 int c = comp.compare(e, list.get(mi));
                 if (c < 0)
-                    hi = mi;
+                    hi = mi;    // forward to [lo, mi)
                 else
-                    lo = mi + 1;
+                    lo = mi + 1;    // forward to (mi, hi)
             }
             return --lo;
         }
     }
+
+    // O(loglogn)
+    static class InterpolationSearch<E> implements Searchable<E> {
+
+        @Override
+        public int search(MyList<E> list, E e, int lo, int hi, ElemComparable<E> comp) {
+            int mi;
+            int c;
+            if (hi >= list.size()) hi = list.size() - 1;
+
+            while (comp.compare(list.get(lo), list.get(hi)) != 0 // A[hi] != A[lo] && A[lo] <= e <= A[hi]
+                    && comp.compare(list.get(lo), e) <= 0
+                    && comp.compare(list.get(hi), e) >= 0) {
+                // mi = lo + (hi - lo) * (e - A[lo]) / (A[hi] - A[lo])
+                mi = lo + (hi - lo) * (comp.compare(e, list.get(lo))) / (comp.compare(list.get(hi), list.get(lo)));
+                c = comp.compare(list.get(mi), e);
+                if (c < 0) {
+                    lo = mi + 1;
+                } else if (c > 0) {
+                    hi = mi - 1;
+                } else
+                    return mi;
+            }
+
+            if (comp.compare(e, list.get(lo)) == 0) {
+                return lo;
+            } else
+                return -1;
+        }
+    }
+
+    ////////////////////////////////// Sort class //////////////////////////////////////////
+
+    // O(n^2)
+    static class BubbleSort<E> implements Sortable<E> {
+
+        @Override
+        public void sort(MyList<E> list, int lo, int hi, ElemComparable<E> comp) {
+            while (!bubble(list, lo, hi, comp))
+                ;
+        }
+
+        boolean bubble(MyList<E> list, int lo, int hi, ElemComparable<E> comp) {
+            boolean sorted = true;  // is already sorted?
+            while (++lo < hi) {
+                if (comp.compare(list.get(lo - 1), list.get(lo)) > 0) {
+                    sorted = false; // not sorted
+                    list.swap(lo - 1, lo);
+                }
+            }
+            return sorted;
+        }
+    }
+
 }

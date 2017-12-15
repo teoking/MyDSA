@@ -9,7 +9,7 @@ public interface MySortedList<E> {
 
     void sort(int lo, int hi);
 
-    int find(E e);
+    int find(E e, ElemComparable comp);
 
     void deduplicate();
 
@@ -19,5 +19,9 @@ public interface MySortedList<E> {
 
     public interface Searchable<E> {
         int search(MyList<E> list, E e, int lo, int hi, ElemComparable<E> comp);
+    }
+
+    public interface Sortable<E> {
+        void sort(MyList<E> list, int lo, int hi, ElemComparable<E> comp);
     }
 }

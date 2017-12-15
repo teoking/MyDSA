@@ -78,6 +78,13 @@ public class MyArrayList<E> implements MyList<E> {
 
     }
 
+    @Override
+    public void swap(int l, int r) {
+        E temp = elem[l];
+        elem[l] = elem[r];
+        elem[r] = temp;
+    }
+
     // protected methods
 
     protected void expand() {

@@ -15,5 +15,7 @@ public interface MyList<E> {
 
     E remove(int r);
 
+    void swap(int l, int r);
+
     void traverse();
 }
