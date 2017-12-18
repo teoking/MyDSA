@@ -204,4 +204,35 @@ public class MySortedArrayList<E> extends MyArrayList<E> implements MySortedList
         }
     }
 
+    // O(nlogn)
+    static class MergeSort<E> implements Sortable<E> {
+
+        @Override
+        public void sort(MyList<E> list, int lo, int hi, ElemComparable<E> comp) {
+            if (hi - lo < 2) return;
+            int mi = (lo + hi) / 2;     // mi as the center
+            sort(list, lo, mi, comp);   // [lo, mi)
+            sort(list, mi, hi, comp);   // [mi, hi)
+            merge(list, lo, mi, hi, comp);
+        }
+
+        // O(n)
+        private void merge(MyList<E> list, int lo, int mi, int hi, ElemComparable<E> comp) {
+            E[] A = ((MyArrayList<E>) list).elem;
+            int lb = mi - lo;
+            E[] B = (E[]) new Object[lb];
+            for (int i = 0; i < lb; B[i] = list.get(lo + i++))
+                ;
+
+            int lc = hi - mi;
+            for (int i = lo, j = 0, k = 0; (j < lb) || (k < lc);) {
+                if ((j < lb) && (!(k < lc) || (comp.compare(B[j], A[mi + k]) <= 0)))
+                    A[i++] = B[j++];
+                if ((k < lc) && (!(j < lb) || (comp.compare(A[mi + k], B[j]) < 0)))
+                    A[i++] = A[mi + k++];
+            }
+        }
+
+    }
+
 }

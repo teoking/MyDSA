@@ -103,4 +103,38 @@ class MySortedArrayListTest {
         assertTrue(list.get(0).toInt() == 1)
         assertTrue(list.get(list.size() - 1).toInt() == 66)
     }
+
+    @Test
+    fun `test merge sort`() {
+        list.insert(Integer(6))
+        list.insert(Integer(3))
+        list.insert(Integer(2))
+        list.insert(Integer(7))
+        list.insert(Integer(1))
+        list.insert(Integer(5))
+        list.insert(Integer(8))
+        list.insert(Integer(4))
+
+        val sortMethod : MySortedList.Sortable<Integer> = MySortedArrayList.MergeSort<Integer>()
+        sortMethod.sort(list, 0, list.size, comp)
+
+        assertTrue(list.get(0).toInt() == 1)
+        assertTrue(list.get(list.size() - 1).toInt() == 8)
+
+        list.remove(0, list.size() - 1)
+        list.insert(Integer(3))
+        list.insert(Integer(2))
+        list.insert(Integer(5))
+        list.insert(Integer(1))
+        list.insert(Integer(66))
+        list.insert(Integer(2))
+        list.insert(Integer(9))
+        list.insert(Integer(10))
+        list.insert(Integer(17))
+
+        sortMethod.sort(list, 0, list.size, comp)
+
+        assertTrue(list.get(0).toInt() == 1)
+        assertTrue(list.get(list.size() - 1).toInt() == 66)
+    }
 }

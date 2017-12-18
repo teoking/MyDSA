@@ -24,6 +24,10 @@ public class JavaSyntaxTest {
             break;
         }
         System.out.println(a);
+
+        int k = 1;
+        System.out.println((1 + k++));
+        System.out.println(k);
     }
 
 }
