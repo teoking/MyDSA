@@ -220,11 +220,13 @@ public class MySortedArrayList<E> extends MyArrayList<E> implements MySortedList
         private void merge(MyList<E> list, int lo, int mi, int hi, ElemComparable<E> comp) {
             E[] A = ((MyArrayList<E>) list).elem;
             int lb = mi - lo;
-            E[] B = (E[]) new Object[lb];
-            for (int i = 0; i < lb; B[i] = list.get(lo + i++))
+            E[] B = (E[]) new Object[lb];   // prev sub array: B[0, lb) = elem[lo, mi)
+            for (int i = 0; i < lb; B[i] = list.get(lo + i++))  // copy elem[lo, mi)
                 ;
 
             int lc = hi - mi;
+            // notice: last sub array is elem[mi, hi), that is vector C in the textbook
+            // The following codes add the smaller one of B[j] and C[k] to the end of A.
             for (int i = lo, j = 0, k = 0; (j < lb) || (k < lc);) {
                 if ((j < lb) && (!(k < lc) || (comp.compare(B[j], A[mi + k]) <= 0)))
                     A[i++] = B[j++];
