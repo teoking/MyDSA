@@ -6,7 +6,7 @@ import org.junit.Test
 /**
  * Created by teoking on 17-12-14.
  */
-class MySortedArrayListTest {
+class MySortedVectorTest {
 
     class ElemComparableImpl : ElemComparable<Integer> {
 
@@ -16,7 +16,7 @@ class MySortedArrayListTest {
     }
 
     private val comp : ElemComparable<Integer> = ElemComparableImpl()
-    private val list : MySortedArrayList<Integer> = MySortedArrayList<Integer>()
+    private val list : MySortedVector<Integer> = MySortedVector<Integer>()
 
     @Test
     fun `test disordered`() {
@@ -58,28 +58,28 @@ class MySortedArrayListTest {
         list.insert(Integer(17))
         list.insert(Integer(17))
 
-        var searchMethod : MySortedList.Searchable<Integer> = MySortedArrayList.LinearSearch<Integer>()
+        var searchMethod : SortedVector.Searchable<Integer> = MySortedVector.LinearSearch<Integer>()
         assertTrue(list.search(Integer(6), 0, list.size() - 1, comp, searchMethod) == 2)
         assertTrue(list.search(Integer(14), 0, list.size() - 1, comp, searchMethod) == 5)
 
-        searchMethod = MySortedArrayList.BinarySearchA()
+        searchMethod = MySortedVector.BinarySearchA()
         assertTrue(list.search(Integer(6), 0, list.size() - 1, comp, searchMethod) == 2)
         assertTrue(list.search(Integer(14), 0, list.size() - 1, comp, searchMethod) == 5)
 
-        searchMethod = MySortedArrayList.FibSearch()
+        searchMethod = MySortedVector.FibSearch()
         assertTrue(list.search(Integer(6), 0, list.size() - 1, comp, searchMethod) == 2)
         assertTrue(list.search(Integer(14), 0, list.size() - 1, comp, searchMethod) == 5)
 
-        searchMethod = MySortedArrayList.BinarySearchB()
+        searchMethod = MySortedVector.BinarySearchB()
         assertTrue(list.search(Integer(6), 0, list.size() - 1, comp, searchMethod) == 2)
         assertTrue(list.search(Integer(14), 0, list.size() - 1, comp, searchMethod) == 5)
 
-        searchMethod = MySortedArrayList.BinarySearchC()
+        searchMethod = MySortedVector.BinarySearchC()
         assertTrue(list.search(Integer(6), 0, list.size() - 1, comp, searchMethod) == 2)
         assertTrue(list.search(Integer(14), 0, list.size() - 1, comp, searchMethod) == 5)
         assertTrue(list.search(Integer(17), 0, list.size() - 1, comp, searchMethod) == 7)
 
-        searchMethod = MySortedArrayList.InterpolationSearch()
+        searchMethod = MySortedVector.InterpolationSearch()
         assertTrue(list.search(Integer(6), 0, list.size() - 1, comp, searchMethod) == 2)
         assertTrue(list.search(Integer(14), 0, list.size() - 1, comp, searchMethod) == 5)
         assertTrue(list.search(Integer(17), 0, list.size() - 1, comp, searchMethod) == 8)
@@ -97,7 +97,7 @@ class MySortedArrayListTest {
         list.insert(Integer(10))
         list.insert(Integer(17))
 
-        val sortMethod : MySortedList.Sortable<Integer> = MySortedArrayList.BubbleSort<Integer>()
+        val sortMethod : SortedVector.Sortable<Integer> = MySortedVector.BubbleSort<Integer>()
         sortMethod.sort(list, 0, list.size, comp)
 
         assertTrue(list.get(0).toInt() == 1)
@@ -115,7 +115,7 @@ class MySortedArrayListTest {
         list.insert(Integer(8))
         list.insert(Integer(4))
 
-        val sortMethod : MySortedList.Sortable<Integer> = MySortedArrayList.MergeSort<Integer>()
+        val sortMethod : SortedVector.Sortable<Integer> = MySortedVector.MergeSort<Integer>()
         sortMethod.sort(list, 0, list.size, comp)
 
         assertTrue(list.get(0).toInt() == 1)

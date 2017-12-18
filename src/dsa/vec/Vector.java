@@ -3,7 +3,7 @@ package dsa.vec;
 /**
  * Created by teoking on 17-12-13.
  */
-public interface MyList<E> {
+public interface Vector<E> {
 
     int size();
 

@@ -3,7 +3,7 @@ package dsa.vec;
 /**
  * Created by teoking on 17-12-14.
  */
-public class MyArrayList<E> implements MyList<E> {
+public class MyVector<E> implements Vector<E> {
 
     private static final int DEFAULT_CAPACITY = 10;
 
@@ -11,13 +11,13 @@ public class MyArrayList<E> implements MyList<E> {
     int capacity;
     E[] elem;
 
-    public MyArrayList() {
+    public MyVector() {
         capacity = DEFAULT_CAPACITY;
         elem = (E[]) new Object[capacity];
         size = 0;
     }
 
-    public MyArrayList(int n) {
+    public MyVector(int n) {
         elem = (E[]) new Object[capacity = n];
         size = 0;
     }

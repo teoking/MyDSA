@@ -2,25 +2,24 @@ package dsa.vec
 
 import org.junit.Assert.*
 import org.junit.Test
-import java.util.ArrayList
 
 /**
  * Created by teoking on 17-12-14.
  */
-class MyArrayListTest {
+class MyVectorTest {
 
     @Test
     fun `create empty MyArrayList`() {
-        var list = MyArrayList<Integer>()
+        var list = MyVector<Integer>()
         assert(list.size() == 0)
 
-        list = MyArrayList<Integer>(10)
+        list = MyVector<Integer>(10)
         assertTrue(list.size() == 0)
     }
 
     @Test
     fun `test insertion`() {
-        val list = MyArrayList<Integer>()
+        val list = MyVector<Integer>()
         list.insert(Integer(0))
         list.insert(Integer(1))
 
@@ -43,7 +42,7 @@ class MyArrayListTest {
 
     @Test
     fun `test remove`() {
-        val list = MyArrayList<Integer>()
+        val list = MyVector<Integer>()
         list.insert(Integer(0))
         list.insert(Integer(1))
         list.insert(Integer(2))

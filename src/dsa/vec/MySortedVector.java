@@ -5,7 +5,7 @@ import dsa.fib.Fibonacci;
 /**
  * Created by teoking on 17-12-14.
  */
-public class MySortedArrayList<E> extends MyArrayList<E> implements MySortedList<E> {
+public class MySortedVector<E> extends MyVector<E> implements SortedVector<E> {
 
     @Override
     public int disordered(ElemComparable comp) {
@@ -63,7 +63,7 @@ public class MySortedArrayList<E> extends MyArrayList<E> implements MySortedList
     static class LinearSearch<E> implements Searchable<E> {
 
         @Override
-        public int search(MyList<E> list, E e, int lo, int hi, ElemComparable<E> comp) {
+        public int search(Vector<E> list, E e, int lo, int hi, ElemComparable<E> comp) {
             while (lo < hi) {
                 if (comp.compare(e, list.get(lo)) == 0) {
                     return lo;
@@ -79,7 +79,7 @@ public class MySortedArrayList<E> extends MyArrayList<E> implements MySortedList
     static class BinarySearchA<E> implements Searchable<E> {
 
         @Override
-        public int search(MyList<E> list, E e, int lo, int hi, ElemComparable<E> comp) {
+        public int search(Vector<E> list, E e, int lo, int hi, ElemComparable<E> comp) {
             while(lo < hi) {
                 int mi = (lo + hi) >> 1; // middle index
                 int c = comp.compare(e, list.get(mi));
@@ -101,7 +101,7 @@ public class MySortedArrayList<E> extends MyArrayList<E> implements MySortedList
     static class FibSearch<E> implements Searchable<E> {
 
         @Override
-        public int search(MyList<E> list, E e, int lo, int hi, ElemComparable<E> comp) {
+        public int search(Vector<E> list, E e, int lo, int hi, ElemComparable<E> comp) {
             Fibonacci fib = new Fibonacci(hi - lo);
             while (lo < hi) {
                 while (hi - lo < fib.get())
@@ -123,7 +123,7 @@ public class MySortedArrayList<E> extends MyArrayList<E> implements MySortedList
     static class BinarySearchB<E> implements Searchable<E> {
 
         @Override
-        public int search(MyList<E> list, E e, int lo, int hi, ElemComparable<E> comp) {
+        public int search(Vector<E> list, E e, int lo, int hi, ElemComparable<E> comp) {
             while (1 < hi - lo) {
                 int mi = (lo + hi) >> 1;    // middle index
 
@@ -138,7 +138,7 @@ public class MySortedArrayList<E> extends MyArrayList<E> implements MySortedList
     static class BinarySearchC<E> implements Searchable<E> {
 
         @Override
-        public int search(MyList<E> list, E e, int lo, int hi, ElemComparable<E> comp) {
+        public int search(Vector<E> list, E e, int lo, int hi, ElemComparable<E> comp) {
             while (lo < hi) {
                 int mi = (lo + hi) >> 1;
                 int c = comp.compare(e, list.get(mi));
@@ -155,7 +155,7 @@ public class MySortedArrayList<E> extends MyArrayList<E> implements MySortedList
     static class InterpolationSearch<E> implements Searchable<E> {
 
         @Override
-        public int search(MyList<E> list, E e, int lo, int hi, ElemComparable<E> comp) {
+        public int search(Vector<E> list, E e, int lo, int hi, ElemComparable<E> comp) {
             int mi;
             int c;
             if (hi >= list.size()) hi = list.size() - 1;
@@ -187,12 +187,12 @@ public class MySortedArrayList<E> extends MyArrayList<E> implements MySortedList
     static class BubbleSort<E> implements Sortable<E> {
 
         @Override
-        public void sort(MyList<E> list, int lo, int hi, ElemComparable<E> comp) {
+        public void sort(Vector<E> list, int lo, int hi, ElemComparable<E> comp) {
             while (!bubble(list, lo, hi, comp))
                 ;
         }
 
-        boolean bubble(MyList<E> list, int lo, int hi, ElemComparable<E> comp) {
+        boolean bubble(Vector<E> list, int lo, int hi, ElemComparable<E> comp) {
             boolean sorted = true;  // is already sorted?
             while (++lo < hi) {
                 if (comp.compare(list.get(lo - 1), list.get(lo)) > 0) {
@@ -208,7 +208,7 @@ public class MySortedArrayList<E> extends MyArrayList<E> implements MySortedList
     static class MergeSort<E> implements Sortable<E> {
 
         @Override
-        public void sort(MyList<E> list, int lo, int hi, ElemComparable<E> comp) {
+        public void sort(Vector<E> list, int lo, int hi, ElemComparable<E> comp) {
             if (hi - lo < 2) return;
             int mi = (lo + hi) / 2;     // mi as the center
             sort(list, lo, mi, comp);   // [lo, mi)
@@ -217,8 +217,8 @@ public class MySortedArrayList<E> extends MyArrayList<E> implements MySortedList
         }
 
         // O(n)
-        private void merge(MyList<E> list, int lo, int mi, int hi, ElemComparable<E> comp) {
-            E[] A = ((MyArrayList<E>) list).elem;
+        private void merge(Vector<E> list, int lo, int mi, int hi, ElemComparable<E> comp) {
+            E[] A = ((MyVector<E>) list).elem;
             int lb = mi - lo;
             E[] B = (E[]) new Object[lb];   // prev sub array: B[0, lb) = elem[lo, mi)
             for (int i = 0; i < lb; B[i] = list.get(lo + i++))  // copy elem[lo, mi)
