@@ -4,7 +4,7 @@ package dsa.list;
  * Created by teoking on 17-12-18.
  */
 // ADT
-public abstract class ListNode<T> {
+public class ListNode<T> {
 
     T data;     // data
     ListNode<T> pred;   // predecessor
@@ -17,6 +17,10 @@ public abstract class ListNode<T> {
         this.succ = succ;
     }
 
-    abstract ListNode<T> insertAsPred(T e);
-    abstract  ListNode<T> insertAsSucc(T e);
+    public ListNode<T> insertAsPred(T e){
+        return null;
+    }
+    public ListNode<T> insertAsSucc(T e){
+        return null;
+    }
 }
