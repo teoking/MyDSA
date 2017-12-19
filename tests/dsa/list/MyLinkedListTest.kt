@@ -9,8 +9,23 @@ class MyLinkedListTest {
 
     class ElemComparableImpl : ElemComparable<Integer> {
 
-        override fun compare(e1: Integer, e2: Integer): Int {
-            return e1.toInt() - e2.toInt()
+        override fun compare(e1: Integer?, e2: Integer?): Int {
+            if (e1 == null && e2 == null) {
+                return 0
+            }
+            if (e1 != null) {
+                if (e2 == null) {
+                    return Math.abs(e1.toInt())
+                } else {
+                    return e1.toInt() - e2.toInt()
+                }
+            } else {
+                if (e2 == null) {
+                    return 0
+                } else {
+                    return e2.toInt()
+                }
+            }
         }
     }
 
@@ -62,15 +77,45 @@ class MyLinkedListTest {
         list.insertAsLast(Integer(2))
         list.insertAsLast(Integer(1))
 
-        dumpList(list)
-
         list.insertionSort(list.first(), list.size(), comp)
 
         assertEquals(list.first().data.toInt(), 1)
         assertEquals(list.last().data.toInt(), 7)
     }
 
-    fun dumpList(list: MyLinkedList<*>) {
+    @Test
+    fun `test selection sort`() {
+        list.insertAsLast(Integer(7))
+        list.insertAsLast(Integer(6))
+        list.insertAsLast(Integer(5))
+        list.insertAsLast(Integer(4))
+        list.insertAsLast(Integer(3))
+        list.insertAsLast(Integer(2))
+        list.insertAsLast(Integer(1))
+
+        list.selectionSort(list.first(), list.size(), comp)
+
+        assertEquals(list.first().data.toInt(), 1)
+        assertEquals(list.last().data.toInt(), 7)
+    }
+
+    @Test
+    fun `test merge sort`() {
+        list.insertAsLast(Integer(7))
+        list.insertAsLast(Integer(6))
+        list.insertAsLast(Integer(5))
+        list.insertAsLast(Integer(4))
+        list.insertAsLast(Integer(3))
+        list.insertAsLast(Integer(2))
+        list.insertAsLast(Integer(1))
+
+        list.mergeSort(list.first(), list.size(), comp)
+
+        assertEquals(list.first().data.toInt(), 1)
+        assertEquals(list.last().data.toInt(), 7)
+    }
+
+    private fun dumpList(list: MyLinkedList<*>) {
         var p = list.header.succ
         var sb = StringBuilder()
         while (p != list.trailer) {

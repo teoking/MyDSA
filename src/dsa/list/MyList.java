@@ -19,11 +19,14 @@ public interface MyList<T> {
     // Merge sort n nodes begin with p.
     // void mergeSort
 
-    // Selection sort n nodes begin wih p.
+    // Selection sort n nodes begin at p.
     void selectionSort(ListNode<T> pos, int n, ElemComparable<T> comp);
 
-    // Insertion sort n nodes begin wih p.
+    // Insertion sort n nodes begin at p.
     void insertionSort(ListNode<T> pos, int n, ElemComparable<T> comp);
+
+    // Merge sort n nodes begin at p.
+    void mergeSort(ListNode<T> pos, int n, ElemComparable<T> comp);
 
     int size();
     boolean empty();
