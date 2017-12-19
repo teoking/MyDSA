@@ -18,9 +18,16 @@ public class ListNode<T> {
     }
 
     public ListNode<T> insertAsPred(T e){
-        return null;
+        ListNode<T> x = new ListNode<>(e, pred, this);
+        pred.succ = x;
+        pred = x;
+        return x;
     }
     public ListNode<T> insertAsSucc(T e){
-        return null;
+        ListNode<T> x = new ListNode<>(e, this, succ);
+        succ.pred = x;
+        succ = x;
+        return x;
     }
+
 }

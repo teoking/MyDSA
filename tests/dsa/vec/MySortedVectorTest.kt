@@ -1,5 +1,6 @@
 package dsa.vec
 
+import dsa.common.ElemComparable
 import org.junit.Assert.*
 import org.junit.Test
 
@@ -20,7 +21,7 @@ class MySortedVectorTest {
 
     @Test
     fun `test disordered`() {
-        list.insert(Integer(0))
+        list.insert(Integer( 0))
         list.insert(Integer(1))
         list.insert(Integer(2))
         list.insert(Integer(3))

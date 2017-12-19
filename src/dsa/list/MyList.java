@@ -1,5 +1,10 @@
 package dsa.list;
 
+import dsa.common.ElemComparable;
+
+import java.io.IOException;
+import java.io.OutputStream;
+
 /**
  * Created by teoking on 17-12-18.
  */
@@ -7,7 +12,7 @@ public interface MyList<T> {
 
     void init();
     int clear();
-    void copyNodes(ListNode targetNode, int copiedNodesNumber);
+    void copyNodes(ListNode<T> position, int n);
     // Sort methods
     // void merge
 
@@ -15,10 +20,10 @@ public interface MyList<T> {
     // void mergeSort
 
     // Selection sort n nodes begin wih p.
-    void selectionSort(ListNode pos, int n);
+    void selectionSort(ListNode<T> pos, int n, ElemComparable<T> comp);
 
     // Insertion sort n nodes begin wih p.
-    void insertionSort(ListNode pos, int n);
+    void insertionSort(ListNode<T> pos, int n, ElemComparable<T> comp);
 
     int size();
     boolean empty();
@@ -31,11 +36,13 @@ public interface MyList<T> {
     /**
      * Search e in disordered {@MyList}
      * @param e
+     * @param comp
      * @return
      */
-    ListNode<T> find(T e);
+    ListNode<T> find(T e, ElemComparable<T> comp);
 
-    ListNode<T> search(T e);
+    ListNode<T> search(T e, ElemComparable<T> comp);
+    ListNode<T> search(T e, int n, ListNode<T> p, ElemComparable<T> comp);
 
     /**
      * Select the largest one after p.
@@ -43,14 +50,15 @@ public interface MyList<T> {
      * @param n
      * @return
      */
-    ListNode<T> selectMax(ListNode<T> p, int n);
+    ListNode<T> selectMax(ListNode<T> p, int n, ElemComparable<T> comp);
 
     // Insertion & Remove
     ListNode<T> insertAsFirst(T e);
     ListNode<T> insertAsLast(T e);
     ListNode<T> insertA(ListNode<T> p, T e);    // insert as successor
     ListNode<T> insertB(ListNode<T> p, T e);    // insert as predecessor
-    int deduplicated();
+    T remove(ListNode<T> p);
+    int deduplicated(ElemComparable<T> comp);
     int uniquify();
     void reverse();
 

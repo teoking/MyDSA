@@ -1,4 +1,4 @@
-package dsa.vec;
+package dsa.common;
 
 /**
  * Created by teoking on 17-12-14.

@@ -1,16 +1,16 @@
 package dsa.list;
 
+import java.io.IOException;
+import java.io.OutputStream;
+
 public abstract class MyAbstractList<T> implements MyList<T> {
 
-    private int size;
-    private ListNode<T> header;
-    private ListNode<T> trailer;
+    protected int size;
+    protected ListNode<T> header;
+    protected ListNode<T> trailer;
 
     public MyAbstractList() {
         init();
-    }
-
-    public MyAbstractList(MyList<T> list) {
     }
 
     @Override
@@ -25,8 +25,21 @@ public abstract class MyAbstractList<T> implements MyList<T> {
     }
 
     @Override
+    public void copyNodes(ListNode<T> p, int n) {
+        init();
+        while (n-- > 0) {
+            insertAsLast(p.data);
+            p = p.succ;
+        }
+    }
+
+    // O(n)
+    @Override
     public int clear() {
-        return 0;
+        int oldSize = size;
+        while (0 < size)
+            remove(header.succ);
+        return oldSize;
     }
 
     @Override
@@ -54,4 +67,36 @@ public abstract class MyAbstractList<T> implements MyList<T> {
         return p != null && (trailer != p) && (header != p);
     }
 
+    @Override
+    public ListNode<T> insertAsFirst(T e) {
+        size++;
+        return header.insertAsSucc(e);
+    }
+
+    @Override
+    public ListNode<T> insertAsLast(T e) {
+        size++;
+        return trailer.insertAsPred(e);
+    }
+
+    @Override
+    public ListNode<T> insertA(ListNode<T> p, T e) {
+        size++;
+        return p.insertAsSucc(e);
+    }
+
+    @Override
+    public ListNode<T> insertB(ListNode<T> p, T e) {
+        size++;
+        return p.insertAsPred(e);
+    }
+
+    @Override
+    public T remove(ListNode<T> p) {
+        T e = p.data;
+        p.pred.succ = p.succ;
+        p.succ.pred = p.pred;
+        size--;
+        return e;
+    }
 }

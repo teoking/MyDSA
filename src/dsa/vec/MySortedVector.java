@@ -1,5 +1,6 @@
 package dsa.vec;
 
+import dsa.common.ElemComparable;
 import dsa.fib.Fibonacci;
 
 /**

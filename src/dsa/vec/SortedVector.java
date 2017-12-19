@@ -1,5 +1,7 @@
 package dsa.vec;
 
+import dsa.common.ElemComparable;
+
 /**
  * Created by teoking on 17-12-14.
  */
