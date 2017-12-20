@@ -36,15 +36,21 @@ public class MyLinkedList<T> extends MyAbstractList<T> {
         }
     }
 
+    // TODO merge sort not working here.
+    // p is not always right, and I couldn't find the cause.
+    int depth = 0;
+    ListNode<T> startPos = first();
     // O(nlogn)
     @Override
     public void mergeSort(ListNode<T> p, int n, ElemComparable<T> comp) {
+        depth++;
         if (n < 2) return;
         int m = n >> 1;     // center as the boundary
         ListNode<T> q = p;
         for (int i = 0; i < m; i++) {
             q = q.succ;     // divide the list to two parts.
         }
+        System.out.println("mergeSort d=" + depth + " p=" + p + "  p.data=" + p.data + " q=" + q + " q.data=" + q.data);
         mergeSort(p, m, comp);      // sort the first part
         mergeSort(q, n - m, comp);      // sort the last part.
         merge(p, m, this, q, n - m, comp);    // merge
@@ -52,6 +58,7 @@ public class MyLinkedList<T> extends MyAbstractList<T> {
 
     // merge the n elements begin at p in this list, with the m elements begin at q in the L.
     private void merge(ListNode<T> p, int n, MyList<T> L, ListNode<T> q, int m, ElemComparable<T> comp) {
+        System.out.println("    merge d=" + depth + " p=" + p + "  p.data=" + p.data + " q=" + q + " q.data=" + q.data);
         // assert: this.valid(p) && rank(p) + n <= size && this.sorted(p, n)
         //          L.valid(q) && rank(q) + m <= L.size && L.sorted(q, m)
         // notice: possible case in kind of merge sort, this == L && rank(p) + n == rank(q)
@@ -63,11 +70,15 @@ public class MyLinkedList<T> extends MyAbstractList<T> {
                 }
                 n--;
             } else {
-                insertB(p, L.remove((q = q.succ).pred));
+                if (q != trailer) {
+                    q = q.succ;
+                }
+                insertB(p, L.remove(q.pred));
                 m--;
             }
-            p = pp.succ;    // the new start point after merging.
         }
+        p = pp.succ;    // the new start point after merging.
+        System.out.println("        p d=" + depth + " p=" + p + "  p.data=" + p.data + " q=" + q + " q.data=" + q.data);
     }
 
     @Override
@@ -168,6 +179,16 @@ public class MyLinkedList<T> extends MyAbstractList<T> {
             }
         }
         return null;
+    }
+
+    private void dumpList() {
+        ListNode<T> p = header.succ;
+        StringBuilder sb = new StringBuilder();
+        while (p != trailer) {
+            sb.append("" + p.data).append(" ");
+            p = p.succ;
+        }
+        System.out.println(sb.toString());
     }
 
 }

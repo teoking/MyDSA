@@ -11,23 +11,39 @@ public class JavaSyntaxTest {
         i.set(i.get() + 1);
     }
 
+    static Obj start = new Obj("aaa");
+
     public static void main(String[] args) {
+        sort(objs, start, objs.length);
+    }
 
-        IntRef i = new IntRef(0);
-        changePrimitive(i);
-        changePrimitive(i);
-        System.out.println(i.get());
+    static Obj[] objs = new Obj[] {
+            start,
+            new Obj("bbb"),
+            new Obj("ccc"),
+            new Obj("ddd")
+    };
 
-        int a = 0;
-        while (a++ < 1) {
-            System.out.println(a);
-            break;
+    static void sort(Obj[] objs, Obj start, int p) {
+        if (p < 1)
+            return;
+        p--;
+        System.out.println(start + " value=" + start.val);
+
+        sort(objs, start, p);
+        sortInner(objs, start, p);
+    }
+
+    static void sortInner(Obj[] objs, Obj start, int p) {
+        start = objs[p];
+    }
+
+    static class Obj {
+        String val;
+
+        Obj(String a) {
+            this.val = a;
         }
-        System.out.println(a);
-
-        int k = 1;
-        System.out.println((1 + k++));
-        System.out.println(k);
     }
 
 }

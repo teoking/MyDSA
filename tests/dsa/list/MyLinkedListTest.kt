@@ -101,18 +101,21 @@ class MyLinkedListTest {
 
     @Test
     fun `test merge sort`() {
-        list.insertAsLast(Integer(7))
         list.insertAsLast(Integer(6))
-        list.insertAsLast(Integer(5))
-        list.insertAsLast(Integer(4))
         list.insertAsLast(Integer(3))
         list.insertAsLast(Integer(2))
+        list.insertAsLast(Integer(7))
         list.insertAsLast(Integer(1))
+        list.insertAsLast(Integer(5))
+        list.insertAsLast(Integer(8))
+        list.insertAsLast(Integer(4))
 
         list.mergeSort(list.first(), list.size(), comp)
 
+        dumpList(list)
+
         assertEquals(list.first().data.toInt(), 1)
-        assertEquals(list.last().data.toInt(), 7)
+        assertEquals(list.last().data.toInt(), 8)
     }
 
     private fun dumpList(list: MyLinkedList<*>) {
