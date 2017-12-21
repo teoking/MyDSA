@@ -1,11 +1,12 @@
 package dsa.stack;
 
+import dsa.vec.MySortedVector;
 import dsa.vec.MyVector;
 
 /**
  * Created by teoking on 17-12-21.
  */
-public class Stack<T> extends MyVector<T> {
+public class Stack<T> extends MySortedVector<T> {
 
     public void push(T e) {
         insert(size(), e);

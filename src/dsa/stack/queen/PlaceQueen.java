@@ -15,6 +15,11 @@ public class PlaceQueen {
             y = yy;
         }
 
+        Queen(Queen q) {
+            x = q.x;
+            y = q.y;
+        }
+
         public boolean equals(Queen q) {
             return (x == q.x)
                     || (y == q.y)
@@ -31,7 +36,7 @@ public class PlaceQueen {
     static ElemComparable<Queen> sComp = new ElemComparable<Queen>() {
         @Override
         public int compare(Queen q1, Queen q2) {
-            return q1.equals(q2) ? 0 : 1;
+            return q1.equals(q2) ? 0 : -1;
         }
     };
 
@@ -41,7 +46,7 @@ public class PlaceQueen {
     void placeQueens(Stack<Queen> solu, int N) {
         Queen q = new Queen(0, 0);  // start from (0,0)
         do {
-            if (N <= solu.size() || N < q.y) {
+            if (N <= solu.size() || N <= q.y) {
                 q = solu.pop();
                 q.y++;
             } else {
@@ -50,14 +55,16 @@ public class PlaceQueen {
                     nCheck++;
                 }
                 if (N > q.y) {
-                    solu.push(q);
-                    if (N <= solu.size())
+                    solu.push(new Queen(q));
+                    if (N <= solu.size()) {
                         nSolu++;
+                        displayProgress(solu, N);
+                    }
                     q.x++;
                     q.y = 0;
                 }
             }
-            displayProgress(solu, N);
+            //displayProgress(solu, N);
         } while (0 < q.x || q.y < N);
     }
 
@@ -66,9 +73,9 @@ public class PlaceQueen {
         int i = 0;
         while (i++ < q.y)
             System.out.print("[]");
-        System.out.println("█");
+        System.out.print("█");
         while (i++ < N)
-            System.out.println("[]");
+            System.out.print("[]");
         System.out.println(String.format("%2d", q.y));
     }
 
@@ -81,11 +88,10 @@ public class PlaceQueen {
         }
     }
 
-
     public static void main(String[] args) {
         PlaceQueen qp = new PlaceQueen();
         Stack<Queen> solu = new Stack<>();
-        qp.placeQueens(solu, 8);
+        qp.placeQueens(solu, 12);
 
         while (!solu.empty()) {
             System.out.println(solu.pop());
