@@ -30,6 +30,8 @@ public interface BinaryTreeNode<T> {
     int getHeight();
     void setHeight(int height);
 
+    void release();
+
     /** Insert as the left child of the node. */
     BinaryTreeNode<T> insertAsLC(T e);
 

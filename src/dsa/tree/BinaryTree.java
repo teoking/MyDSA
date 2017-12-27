@@ -15,7 +15,7 @@ public class BinaryTree<T> {
         BinaryTreeNode<T> parent;
         BinaryTreeNode<T> lc;
         BinaryTreeNode<T> rc;
-        int height;
+        int height; // maintained by BinaryTree
         int npl; // Null Path Length (for Leftist Heaps, can be replace with height)
 
         RBColor color; // color for RB-tree.
@@ -93,9 +93,18 @@ public class BinaryTree<T> {
             return height;
         }
 
+        // Called by the BinaryTree
         @Override
         public void setHeight(int height) {
             this.height = height;
+        }
+
+        @Override
+        public void release() {
+            parent = null;
+            rc = null;
+            lc = null;
+            height = 0;
         }
 
         @Override
@@ -283,7 +292,8 @@ public class BinaryTree<T> {
     // 删除二叉树中位置x处的节点及后代，返回被删除节点的数值
     public int remove(BinaryTreeNode<T> x) {
         BinaryTreeNode<T> refFromParent = OPTS.fromParentTo(this, x);
-        refFromParent.setParent(null);  // 切断来自父节点的指针
+        refFromParent.release();
+//        refFromParent.setParent(null);  // 切断来自父节点的指针
         updateHeightAbove(x.getParent());   //更新祖先高度
         int n = removeAt(x);    // 删除子树x，更新规模，返回删除节点总数
         size -= n;
@@ -291,13 +301,32 @@ public class BinaryTree<T> {
     }
 
     // 删除二叉树中位置x处的节点及后代，返回被删除节点的数值
-    public int removeAt(BinaryTreeNode<T> x) {
+    private int removeAt(BinaryTreeNode<T> x) {
         if (x == null) {
             return 0;
         }
 
         int n = 1 + removeAt(x.getLC()) + removeAt(x.getRC()); // 递归释放左、右子树
         return n;
+    }
+
+    // 二叉树子树分离算法：将子树x从当前树中摘除，将其封装为一颗独立子树返回
+    public BinaryTree<T> secede(BinaryTreeNode<T> x) {  // assert: x为二叉树中的合法位置
+        BinaryTreeNode<T> refFromParent = OPTS.fromParentTo(this, x);
+        refFromParent.setParent(null);
+
+        // 更新原树中所有祖先的高度
+        updateHeightAbove(x.getParent());
+
+        // 新树以x为根
+        BinaryTree<T> s = new BinaryTree<>(this.comp);
+        s.root = x;
+        x.setParent(null);
+
+        // 更新规模，返回分离出来的子树
+        s.size = x.size();
+        size -= s.size;
+        return s;
     }
 
 }
