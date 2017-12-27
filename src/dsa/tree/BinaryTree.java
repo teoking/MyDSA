@@ -197,6 +197,16 @@ public class BinaryTree<T> {
                     (isLChild(x) ? x.getParent().getLC()
                             : x.getParent().getRC());
         }
+
+        public void derefFromParent(BinaryTree tree, BinaryTreeNode x) {
+            if (!isRoot(x)) {
+                if (isLChild(x)) {
+                    x.getParent().setLC(null);
+                } else {
+                    x.getParent().setRC(null);
+                }
+            }
+        }
     }
 
     static final Opts OPTS = new Opts();
@@ -291,9 +301,9 @@ public class BinaryTree<T> {
 
     // 删除二叉树中位置x处的节点及后代，返回被删除节点的数值
     public int remove(BinaryTreeNode<T> x) {
-        BinaryTreeNode<T> refFromParent = OPTS.fromParentTo(this, x);
-        refFromParent.release();
-//        refFromParent.setParent(null);  // 切断来自父节点的指针
+        // 切断来自父节点的指针
+        OPTS.derefFromParent(this, x);
+
         updateHeightAbove(x.getParent());   //更新祖先高度
         int n = removeAt(x);    // 删除子树x，更新规模，返回删除节点总数
         size -= n;
@@ -307,13 +317,14 @@ public class BinaryTree<T> {
         }
 
         int n = 1 + removeAt(x.getLC()) + removeAt(x.getRC()); // 递归释放左、右子树
+        x.release();
         return n;
     }
 
     // 二叉树子树分离算法：将子树x从当前树中摘除，将其封装为一颗独立子树返回
     public BinaryTree<T> secede(BinaryTreeNode<T> x) {  // assert: x为二叉树中的合法位置
-        BinaryTreeNode<T> refFromParent = OPTS.fromParentTo(this, x);
-        refFromParent.setParent(null);
+        // 切断来自父节点的指针
+        OPTS.derefFromParent(this, x);
 
         // 更新原树中所有祖先的高度
         updateHeightAbove(x.getParent());
