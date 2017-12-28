@@ -2,8 +2,6 @@ package dsa.tree;
 
 import dsa.common.ElemComparable;
 
-import javax.xml.soap.Node;
-
 /**
  * Created by teoking on 17-12-27.
  */
@@ -53,6 +51,7 @@ public class BinaryTree<T> {
             return parent;
         }
 
+        // TODO this implementation need assert that node x is int this tree.
         @Override
         public void setParent(BinaryTreeNode<T> x) {
             parent = x;
@@ -80,12 +79,12 @@ public class BinaryTree<T> {
 
         @Override
         public int size() {
-            return 0;
-        }
-
-        @Override
-        public void setSize(int size) {
-
+            int s = 1; // 计入本身
+            if (lc != null)
+                s += lc.size(); // 递归计入左子树规模
+            if (rc != null)
+                s += rc.size(); // 递归计入右子树规模
+            return s;
         }
 
         @Override
@@ -118,8 +117,20 @@ public class BinaryTree<T> {
         }
 
         @Override
-        public BinaryTreeNode<T> succ() {
-            return null;
+        public BinaryTreeNode<T> succ() {   // 定位节点v的直接后继
+            BinaryTreeNode<T> s = this;
+            if (rc != null) {
+                s = rc;
+                while (OPTS.hasLChild(s)) {
+                    s = s.getLC();
+                }
+            } else {
+                while (OPTS.isRChild(s)) {
+                    s = s.getParent();
+                }
+                s = s.getParent();
+            }
+            return s;
         }
 
         @Override
@@ -189,7 +200,7 @@ public class BinaryTree<T> {
 
         public BinaryTreeNode uncle(BinaryTreeNode x) {
             return isLChild(x.getParent()) ? x.getParent().getParent().getRC()
-                    : x.getParent().getParent().getRC();
+                    : x.getParent().getParent().getLC();
         }
 
         public BinaryTreeNode fromParentTo(BinaryTree tree, BinaryTreeNode x) {
@@ -198,7 +209,7 @@ public class BinaryTree<T> {
                             : x.getParent().getRC());
         }
 
-        public void derefFromParent(BinaryTree tree, BinaryTreeNode x) {
+        public void derefFromParent(BinaryTreeNode x) {
             if (!isRoot(x)) {
                 if (isLChild(x)) {
                     x.getParent().setLC(null);
@@ -230,6 +241,11 @@ public class BinaryTree<T> {
         size = 0;
         root = null;
         comp = null;
+    }
+
+    // For testing
+    protected Opts getOpts() {
+        return OPTS;
     }
 
     // Public methods
@@ -274,6 +290,10 @@ public class BinaryTree<T> {
     // 二叉树子树接入算法： 将S当做节点x的左子树接入，S本身置空
     public BinaryTreeNode<T> attachAsLC(BinaryTreeNode<T> x, BinaryTree<T> S) {
         // 接入
+        // 规定：如果要attach的位置已经有节点，那么直接返回null
+        if (x.getLC() != null) {
+            return null;
+        }
         x.setLC(S.root);
         if (x.getLC() != null) {
             x.getLC().setParent(x);
@@ -287,6 +307,10 @@ public class BinaryTree<T> {
     }
 
     public BinaryTreeNode<T> attachAsRC(BinaryTreeNode<T> x, BinaryTree<T> S) {
+        // 规定：如果要attach的位置已经有节点，那么直接返回null
+        if (x.getRC() != null) {
+            return null;
+        }
         x.setRC(S.root);
         if (x.getRC() != null) {
             x.getRC().setParent(x);
@@ -302,7 +326,7 @@ public class BinaryTree<T> {
     // 删除二叉树中位置x处的节点及后代，返回被删除节点的数值
     public int remove(BinaryTreeNode<T> x) {
         // 切断来自父节点的指针
-        OPTS.derefFromParent(this, x);
+        OPTS.derefFromParent(x);
 
         updateHeightAbove(x.getParent());   //更新祖先高度
         int n = removeAt(x);    // 删除子树x，更新规模，返回删除节点总数
@@ -324,7 +348,7 @@ public class BinaryTree<T> {
     // 二叉树子树分离算法：将子树x从当前树中摘除，将其封装为一颗独立子树返回
     public BinaryTree<T> secede(BinaryTreeNode<T> x) {  // assert: x为二叉树中的合法位置
         // 切断来自父节点的指针
-        OPTS.derefFromParent(this, x);
+        OPTS.derefFromParent(x);
 
         // 更新原树中所有祖先的高度
         updateHeightAbove(x.getParent());

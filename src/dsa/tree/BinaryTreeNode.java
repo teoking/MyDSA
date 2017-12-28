@@ -25,7 +25,6 @@ public interface BinaryTreeNode<T> {
 
     // the counts of children of current node, the size of it's subtree
     int size();
-    void setSize(int size);
 
     int getHeight();
     void setHeight(int height);
