@@ -7,9 +7,9 @@ public class MyVector<E> implements Vector<E> {
 
     private static final int DEFAULT_CAPACITY = 10;
 
-    int size;
-    int capacity;
-    E[] elem;
+    public int size;
+    public int capacity;
+    public E[] elem;
 
     public MyVector() {
         capacity = DEFAULT_CAPACITY;
@@ -20,6 +20,14 @@ public class MyVector<E> implements Vector<E> {
     public MyVector(int n) {
         elem = (E[]) new Object[capacity = n];
         size = 0;
+    }
+
+    public MyVector(int n, int size, E defaultValue) {
+        elem = (E[]) new Object[capacity = n];
+        this.size = 0;
+        while (this.size < size) {
+            elem[this.size++] = defaultValue;
+        }
     }
 
     @Override
@@ -93,7 +101,7 @@ public class MyVector<E> implements Vector<E> {
 
         int tempCapacity = capacity * 2;
         E[] tempElements = (E[]) new Object[tempCapacity];
-        System.arraycopy(elem, 0, tempElements, 0, capacity);
+        System.arraycopy(elem, 0, tempElements, 0, size);
         elem = tempElements;
         capacity = tempCapacity;
     }
