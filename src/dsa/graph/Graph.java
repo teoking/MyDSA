@@ -47,8 +47,18 @@ public abstract class Graph<Tv, Te> {
     public abstract int weight ( int v, int u); //边(v, u)的权重
 
     // 算法
-//    abstract void bfs (int v); //广度优先搜索算法
-//    abstract void dfs (int v); //深度优先搜索算法
+
+    /**
+     * Breadth-first search.
+     * @param v
+     */
+    public abstract void bfs (int v); //广度优先搜索算法
+
+    /**
+     * Depth-first search
+     * @param v
+     */
+    public abstract void dfs (int v); //深度优先搜索算法
 //    abstract void bcc (int v); //基于DFS的双连通分量分解算法
 //    abstract Stack<Tv> tSort (int v); //基于DFS的拓扑排序算法
 //    abstract void prim (int v); //最小支撑树Prim算法
