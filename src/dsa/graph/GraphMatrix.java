@@ -338,4 +338,77 @@ public class GraphMatrix<Tv, Te> extends Graph<Tv, Te> {
         //v及其后代可以拓扑排序
         return true;
     }
+
+    // 时间：O(n+e) ， 空间：O(n+e)
+    @Override
+    public void bcc(int s) {
+        // 初始化
+        reset();
+        int clock = 0;
+        int v = s;
+        Stack<Integer> stack = new Stack<>(); //用栈记录排序顶点
+
+        do {
+            if (UNDISCOVERED == status(v)) { //一旦发现未发现的顶点（新连通分量）
+                BCC(v, clock, stack); //即从该顶点出发启动一次BCC
+                stack.pop(); //遍历返回后，弹出栈中最后一个顶点——当前连通域的起点
+            }
+        } while (s != (v = (++v % n)));
+    }
+
+    //利用此处闲置的fTime[]充当hca[]
+    private int hca(int v) {
+        return V.get(v).fTime;
+    }
+
+    private void BCC(int v, int clock, Stack<Integer> stack) {
+        //利用此处闲置的fTime[]充当hca[]
+        V.get(v).fTime = V.get(v).dTime = ++clock;
+        //v被发现并入栈
+        V.get(v).status = DISCOVERED;
+        stack.push(v);
+
+        // 枚举v的所有邻居u
+        for (int u = firstNbr(v); -1 < u; u = nextNbr(v, u)) {
+            switch ( status ( u ) ) { //并视u的状态分别处理
+                case UNDISCOVERED:
+                    //从顶点u处深入
+                    V.get(u).parent = v;
+                    E.get(v).get(u).type = TREE;
+                    BCC(u, clock, stack);
+
+                    //遍历返回后，若发现u（通过后向边）可指向v的真祖先
+                    if (hca(u) < dTime(v))
+                        //则v亦必如此
+                        V.get(v).fTime = Math.min(hca(v), hca(u));
+                    else {
+                        //否则，以v为关节点（u以下即是一个BCC，且其中顶点此时正集中于栈S的顶部）
+                        System.out.print("BCC rooted at " + vertex(v) + ":");
+                        Stack<Integer> temp = new Stack<>();
+                        do {
+                            temp.push(stack.pop());
+                            System.out.print(vertex(temp.top()));
+                        } while (v != temp.top());
+
+                        while(!temp.empty())
+                            stack.push(temp.pop());
+
+                        while (v != stack.pop()); //依次弹出当前BCC中的节点，亦可根据实际需求转存至其它结构
+
+                        stack.push(v); //最后一个顶点（关节点）重新入栈——分摊不足一次
+                        System.out.println();
+                    }
+                    break;
+                case DISCOVERED:
+                    E.get(v).get(u).type = BACKWARD; //标记(v, u)，并按照“越小越高”的准则
+                    if (u != parent(v))
+                        V.get(v).fTime = Math.min(hca(v), dTime(u)); //更新hca[v]
+                    break;
+                default: //VISITED (digraphs only)
+                    E.get(v).get(u).type = (dTime(v) < dTime(u)) ? FORWARD : CROSS;
+                    break;
+            }
+        }
+        V.get(v).status = VISITED; //对v的访问结束
+    }
 }

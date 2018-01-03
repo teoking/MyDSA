@@ -83,7 +83,7 @@ class GraphMatrixTest {
         insertEdge(E, F)
 
         val stack = gm.tSort(map[A]!!)
-        print("sorted: ")
+        print("TSort sorted: ")
         stack.elem.forEach { c ->
             run {
                 if (c != null)
@@ -97,5 +97,88 @@ class GraphMatrixTest {
         for (c in expected) {
             assertEquals(c, stack.pop())
         }
+    }
+
+    @Test
+    fun `test bcc`(){
+        // Create a graph.
+        // Elements:
+        // 0 1 2 3 4 5 6 7 8 9
+        // A B C D E F G H I J
+        val A = 'A'
+        val B = 'B'
+        val C = 'C'
+        val D = 'D'
+        val E = 'E'
+        val F = 'F'
+        val G = 'G'
+        val H = 'H'
+        val I = 'I'
+        val J = 'J'
+        val map = hashMapOf(
+                A to 0,
+                B to 1,
+                C to 2,
+                D to 3,
+                E to 4,
+                F to 5,
+                G to 6,
+                H to 7,
+                I to 8,
+                J to 9
+        )
+        val gm = GraphMatrix<Char, Int>()
+        val insertEdge = fun(e1:Char, e2:Char) {
+            gm.insert(1, map[e1]!!, map[e2]!!, Int.MAX_VALUE)
+        }
+
+        // insert vertices
+        gm.insert(A)
+        gm.insert(B)
+        gm.insert(C)
+        gm.insert(D)
+        gm.insert(E)
+        gm.insert(F)
+        gm.insert(G)
+        gm.insert(H)
+        gm.insert(I)
+        gm.insert(J)
+
+        // insert edges
+        insertEdge(A, B)
+        insertEdge(A, H)
+        insertEdge(A, I)
+        insertEdge(A, J)
+
+        insertEdge(B, A)
+        insertEdge(B, C)
+
+        insertEdge(C, B)
+        insertEdge(C, D)
+        insertEdge(C, H)
+
+        insertEdge(D, C)
+        insertEdge(D, E)
+        insertEdge(D, G)
+
+        insertEdge(E, D)
+        insertEdge(E, G)
+
+        insertEdge(F, G)
+
+        insertEdge(G, D)
+        insertEdge(G, E)
+        insertEdge(G, F)
+
+        insertEdge(H, A)
+        insertEdge(H, C)
+
+        insertEdge(I, A)
+        insertEdge(I, J)
+
+        insertEdge(J, A)
+        insertEdge(J, I)
+
+        gm.bcc(map[A]!!)
     }
 }
