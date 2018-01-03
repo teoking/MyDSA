@@ -39,4 +39,63 @@ class GraphMatrixTest {
     fun `test search`() {
 
     }
+
+    @Test
+    fun `test tSort`() {
+        // Create a graph.
+        // Elements:
+        // 0 1 2 3 4 5
+        // F E D C B A
+        val A = 'A'
+        val B = 'B'
+        val C = 'C'
+        val D = 'D'
+        val E = 'E'
+        val F = 'F'
+        val map = hashMapOf(
+                F to 0,
+                E to 1,
+                D to 2,
+                C to 3,
+                B to 4,
+                A to 5
+        )
+        val gm = GraphMatrix<Char, Int>()
+        val insertEdge = fun(e1:Char, e2:Char) {
+            gm.insert(1, map[e1]!!, map[e2]!!, Int.MAX_VALUE)
+        }
+
+        // insert vertices
+        gm.insert(F)
+        gm.insert(E)
+        gm.insert(D)
+        gm.insert(C)
+        gm.insert(B)
+        gm.insert(A)
+
+        // insert edges
+        insertEdge(A, C)
+        insertEdge(A, D)
+        insertEdge(B, C)
+        insertEdge(C, D)
+        insertEdge(C, E)
+        insertEdge(C, F)
+        insertEdge(E, F)
+
+        val stack = gm.tSort(map[A]!!)
+        print("sorted: ")
+        stack.elem.forEach { c ->
+            run {
+                if (c != null)
+                    print(c + " ")
+            }
+        }
+        assertFalse(stack.empty())
+        assertEquals(map.size, stack.size)
+
+        val expected = "BACEFD".toCharArray()
+        for (c in expected) {
+            assertEquals(c, stack.pop())
+        }
+    }
 }
