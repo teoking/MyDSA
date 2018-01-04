@@ -8,8 +8,8 @@ import static dsa.graph.Graph.VStatus.*;
 
 public class GraphMatrix<Tv, Te> extends Graph<Tv, Te> {
 
-    private MyVector4Matrix<Vertex<Tv>> V;//顶点集（向量）
-    private MyVector4Matrix<MyVector4Matrix<Edge<Te>>> E;//边集（邻接矩阵）
+    protected final MyVector4Matrix<Vertex<Tv>> V;//顶点集（向量）
+    protected final MyVector4Matrix<MyVector4Matrix<Edge<Te>>> E;//边集（邻接矩阵）
 
     public GraphMatrix() {
         n = e = 0;
@@ -410,5 +410,58 @@ public class GraphMatrix<Tv, Te> extends Graph<Tv, Te> {
             }
         }
         V.get(v).status = VISITED; //对v的访问结束
+    }
+
+    // 时间： O(n^2)，后面借助优先级队列等结构可以提高此算法效率
+    //优先级搜索（全图）
+    @Override
+    void pfs(int s, PriorityUpdater pu) { //assert: 0 <= s < n
+        // 初始化
+        reset();
+        int v = s;
+
+        //逐一检查所有顶点
+        do {
+            if (UNDISCOVERED == status(v)) { //一旦发现未发现的顶点
+                PFS(v, pu); //即从该顶点出发启动一次PFS
+            }
+        } while (s != (v = (++v % n))); //按序号检查，故不漏不重
+    }
+
+    //通过定义具体的优先级更新策略prioUpdater，即可实现不同的算法功能
+    private void PFS(int s, PriorityUpdater pu) {
+        //初始化，起点s加至PFS树中
+        V.get(s).priority = 0;
+        V.get(s).status = VISITED;
+        V.get(s).parent = -1;
+
+        //将下一顶点和边加至PFS树中
+        while (true) {
+            //枚举s的所有邻居w
+            for (int w = firstNbr(s); -1 < w; w = nextNbr(s, w)) {
+                //更新顶点w的优先级及其父顶点
+                pu.update(this, s, w);
+            }
+
+            for (int shortest = Integer.MAX_VALUE, w = 0; w < n; w++) {
+                //从尚未加入遍历树的顶点中
+                if (UNDISCOVERED == status(w)) {
+                    //选出下一个
+                    if (shortest > priority(w)) {
+                        shortest = priority(w);
+                        //优先级最高的顶点s
+                        s = w;
+                    }
+                }
+            }
+
+            //直至所有顶点均已加入
+            if (VISITED == status(s))
+                break;
+
+            //将s及与其父的联边加入遍历树
+            V.get(s).status = VISITED;
+            E.get(parent(s)).get(s).type = TREE;
+        }
     }
 }
