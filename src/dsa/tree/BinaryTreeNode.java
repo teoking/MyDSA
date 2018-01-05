@@ -16,6 +16,7 @@ public interface BinaryTreeNode<T> {
     // OPTS
 
     T getData();
+    void setData(T data);
     BinaryTreeNode<T> getParent();
     void setParent(BinaryTreeNode<T> x);
     BinaryTreeNode<T> getLC();

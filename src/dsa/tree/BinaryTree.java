@@ -18,13 +18,14 @@ public class BinaryTree<T> {
 
         RBColor color; // color for RB-tree.
 
-        NodeImpl() {
+        NodeImpl(T e) {
             parent = null;
             lc = null;
             rc = null;
             height = 0;
             npl = 1;
             color = RBColor.RB_RED;
+            data = e;
         }
 
         NodeImpl(T e, BinaryTreeNode<T> parent, BinaryTreeNode<T> lc, BinaryTreeNode<T>  rc) {
@@ -44,6 +45,11 @@ public class BinaryTree<T> {
         @Override
         public T getData() {
             return data;
+        }
+
+        @Override
+        public void setData(T data) {
+            this.data = data;
         }
 
         @Override
@@ -152,7 +158,7 @@ public class BinaryTree<T> {
     /* *********************************
      * BinaryTreeNode status OPTS *
      * *********************************/
-    static class Opts {
+    protected static class Opts {
 
         public int stature(BinaryTreeNode node) {
             return node != null ? node.getHeight() : -1;
@@ -220,10 +226,11 @@ public class BinaryTree<T> {
         }
     }
 
-    static final Opts OPTS = new Opts();
-    ElemComparable<BinaryTreeNode<T>> comp;
-    int size;
-    BinaryTreeNode<T> root;
+    protected static final Opts OPTS = new Opts();
+    protected ElemComparable<BinaryTreeNode<T>> comp;
+    protected int size;
+    protected BinaryTreeNode<T> root;
+
     // update the height of x
     protected int updateHeight(BinaryTreeNode<T> x) {
         x.setHeight(1 + Math.max(OPTS.stature(x.getLC()), OPTS.stature(x.getRC())));
@@ -241,6 +248,14 @@ public class BinaryTree<T> {
         size = 0;
         root = null;
         comp = null;
+    }
+
+    protected BinaryTreeNode<T> newNode(T e) {
+        return new NodeImpl<T>(e);
+    }
+
+    protected BinaryTreeNode<T> newNode(T e, BinaryTreeNode<T> parent) {
+        return new NodeImpl<T>(e, parent, null, null);
     }
 
     // For testing
@@ -266,6 +281,10 @@ public class BinaryTree<T> {
 
     public BinaryTreeNode<T> getRoot() {
         return root;
+    }
+
+    public ElemComparable<BinaryTreeNode<T>> getComp() {
+        return comp;
     }
 
     public BinaryTreeNode<T> insertAsRoot(T e) {
