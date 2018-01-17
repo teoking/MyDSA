@@ -30,6 +30,9 @@ public interface BinaryTreeNode<T> {
     int getHeight();
     void setHeight(int height);
 
+    void setColor(RBColor c);
+    RBColor getColor();
+
     void release();
 
     /** Insert as the left child of the node. */

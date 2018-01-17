@@ -37,8 +37,8 @@ public class BinaryTree<T> {
             this.parent = parent;
             this.lc = lc;
             this.rc = rc;
-            height = 0;
-            npl = 1;
+            this.height = height;
+            npl = l;
             color = RBColor.RB_RED;
         }
 
@@ -110,6 +110,16 @@ public class BinaryTree<T> {
             rc = null;
             lc = null;
             height = 0;
+        }
+
+        @Override
+        public void setColor(RBColor c) {
+            color = c;
+        }
+
+        @Override
+        public RBColor getColor() {
+            return color;
         }
 
         @Override
@@ -215,6 +225,29 @@ public class BinaryTree<T> {
                             : x.getParent().getRC());
         }
 
+        public BinaryTreeNode replaceInParent(BinaryTree tree, BinaryTreeNode src,
+                                                       BinaryTreeNode dst) {
+            if (isRoot(src))
+                return tree.root = dst;
+            if (isLChild(src)) {
+                src.getParent().setLC(dst);
+                return src.getParent().getLC();
+            } else {
+                src.getParent().setRC(dst);
+                return src.getParent().getRC();
+            }
+        }
+
+        //外部节点也视作黑节点
+        public boolean isBlack(BinaryTreeNode p) {
+            return p == null || BinaryTreeNode.RBColor.RB_BLACK == p.getColor();
+        }
+
+        //非黑即红
+        public boolean isRed(BinaryTreeNode p) {
+            return !isBlack(p);
+        }
+
         public void derefFromParent(BinaryTreeNode x) {
             if (!isRoot(x)) {
                 if (isLChild(x)) {
@@ -256,6 +289,12 @@ public class BinaryTree<T> {
 
     protected BinaryTreeNode<T> newNode(T e, BinaryTreeNode<T> parent) {
         return new NodeImpl<T>(e, parent, null, null);
+    }
+
+    protected BinaryTreeNode<T> newNode(T e, BinaryTreeNode<T> parent,
+                                        BinaryTreeNode<T> lc, BinaryTreeNode<T> rc,
+                                        int height, int npl, BinaryTreeNode.RBColor color) {
+        return new NodeImpl<T>(e, parent, lc, rc, height, npl, color);
     }
 
     // For testing

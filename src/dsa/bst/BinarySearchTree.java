@@ -10,7 +10,7 @@ import dsa.tree.BinaryTreeNode;
 public class BinarySearchTree<T> extends BinaryTree<T> {
 
     //“命中”节点的父亲
-    BinaryTreeNode<T> hot;
+    protected BinaryTreeNode<T> hot;
 
     public BinarySearchTree(ElemComparable<BinaryTreeNode<T>> comp) {
         super(comp);
