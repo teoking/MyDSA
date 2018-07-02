@@ -17,7 +17,7 @@ public class JavaSyntaxTest {
         sort(objs, start, objs.length);
     }
 
-    static Obj[] objs = new Obj[] {
+    private static Obj[] objs = new Obj[] {
             start,
             new Obj("bbb"),
             new Obj("ccc"),
